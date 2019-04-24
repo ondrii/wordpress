@@ -82,6 +82,14 @@
             return $html;
         }
     }
+
+    // change contact form 7 ajax loader icon
+    // !!! AKTUALNE MI TO NEJAKE NEFUNGUJE !!!!
+    add_filter('wpcf7_ajax_loader', 'muzli_wpcf7_loader');
+    function muzli_wpcf7_loader( $url ) {
+        // die($url);
+        return 'http://localhost:8888/wordpress/wp-content/themes/muzli/screenshot.png';
+    }
 ?>
 
 <?php 

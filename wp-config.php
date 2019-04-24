@@ -79,6 +79,9 @@ $table_prefix = 'wp_';
  */
 define( 'WP_DEBUG', false );
 
+// dont insert break-lines in contact form 7 - PRIDAVAL SOM TO JA!!!
+define( 'WPCF7_AUTOP', false );
+
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
