@@ -85,11 +85,35 @@
 
     // change contact form 7 ajax loader icon
     // !!! AKTUALNE MI TO NEJAKE NEFUNGUJE !!!!
-    add_filter('wpcf7_ajax_loader', 'muzli_wpcf7_loader');
-    function muzli_wpcf7_loader( $url ) {
-        // die($url);
-        return 'http://localhost:8888/wordpress/wp-content/themes/muzli/screenshot.png';
+    // add_filter('wpcf7_ajax_loader', 'muzli_wpcf7_loader');
+    // function muzli_wpcf7_loader( $url ) {
+    //     // die($url);
+    //     return 'http://localhost:8888/wordpress/wp-content/themes/muzli/screenshot.png';
+    // }
+
+    /**
+     * Sidebars and widgets
+     */
+
+     // tymto som pridal button 'Stuff to delete from yout inbox'
+    add_filter('widget_text','do_shortcode');
+
+    add_action( 'widgets_init', 'muzli_widgets_init' );
+    function muzli_widgets_init() {
+        /* Register the 'primary' sidebar. */
+        register_sidebar(
+            array(
+                'id'            => 'sidebar-primary',
+                'name'          => 'Pre-footer Sidebar',
+                'description'   => 'Shows up under every page',
+                'before_widget' => '<div id="%1$s" class="widget %2$s">',
+                'after_widget'  => '</div>',
+                'before_title'  => '<h3 class="widget-title">',
+                'after_title'   => '</h3>',
+            )
+        );
     }
+
 ?>
 
 <?php 

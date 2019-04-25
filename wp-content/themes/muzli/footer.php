@@ -2,19 +2,8 @@
 
         </main>
 
-        <aside class="pre-footer">
-            <div class="container">
-                <h3>Buy our stuff</h3>
-
-                <p>
-                    This is a website, so obviously we are trying to sell you something.<br>
-                    Click here, so we can send you emails you don't want!
-                </p>
-
-                <a href="#" class="btn btn-green">Stuff to delete from your inbox</a>
-            </div>
-        </aside>
-
+        <?php get_sidebar('primary') ?>
+        
         <footer class="site-footer">
             <div class="container">
                 <p class="small">
