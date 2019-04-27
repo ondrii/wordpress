@@ -7,15 +7,15 @@
         <footer class="site-footer">
             <div class="container">
                 <p class="small">
-                    &copy; Asskick Society, Inc.
+                    
+                    &copy; <?php echo get_theme_mod('copy_by')  ?>
                     <span>
-                        design straight stolen from
-                        <a href="http://muz.li">muz.li</a>
+                        <?php echo get_theme_mod('copy_text')  ?>
                     </span>
-                </p>
+                </p>    
             </div>
         </footer>
-
+        
         <?php 
             wp_footer(); 
         ?>
