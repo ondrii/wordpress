@@ -28,6 +28,8 @@
             log_me(['sevas','pipa']);
         ?>
 
+        
+
         <header class="site-header">
                 <!-- Jedna verzia, kde som si poskusal moznosti wp_nav_menu -->
                 <?php  

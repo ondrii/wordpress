@@ -200,6 +200,164 @@
           
     }
 
+
+
+    /**
+     * Theme Settings
+     */
+
+    //---------------------------------
+    //tu su pouzite nejake hooky
+    add_action( 'admin_menu', 'muzli_add_admin_menu' );
+    add_action( 'admin_init', 'muzli_settings_init' );
+
+    // tieto funkcie su pridanie funkcie stranky
+    function muzli_add_admin_menu(  ) { 
+        // 'add_options_page' -  pridam nejake nove stranky
+        // 1. argument - nazov v 'title', 
+        // 2. argument - nazov polozky v menut, 
+        // 'manage_options' - kto to moze uprovovat,
+        // 'theme_settings' - si vycitam z dokumentacie
+        // 'muzli_options_page' - je nejaky 'callback' - nejaka funkcia, ktora je zodpovedna za vykreslenie samotneho formulara, do ktoreho si pridavam nejake polozky
+
+        add_options_page( 'Theme Settings', 'Theme Settings', 'manage_options', 'theme_settings', 'muzli_options_page' );
+
+    }
+
+
+    function muzli_settings_init(  ) { 
+
+        register_setting( 'muzli_theme', 'muzli_settings', 'save_muzli_theme_settings' );
+        
+        // COPYRIGHT SECTION
+            //vytvaram tu nejake sekcie
+        add_settings_section(
+            'muzli_copyright_section', 
+            __( 'Copyright info', 'muzli' ), 
+            false, 
+            'muzli_theme'
+        );
+
+            //v tych sekciach vytvaram nejake 'field'-y
+        add_settings_field( 
+            'copyright_by', 
+            __( 'Copyright by', 'muzli' ), 
+            'copyright_by_render', 
+            'muzli_theme', 
+            'muzli_copyright_section' 
+        );
+
+        add_settings_field( 
+            'copyright_text', 
+            __( 'Text in footer', 'muzli' ), 
+            'copyright_text_render', 
+            'muzli_theme', 
+            'muzli_copyright_section' 
+        );
+
+        // LOGO SECTION
+        add_settings_section(
+            'muzli_logo_section', 
+            __( 'Upload logo', 'muzli' ), 
+            false, 
+            'muzli_theme'
+        );
+
+        add_settings_field( 
+            'logo', 
+            __( 'Choose an Image', 'muzli' ), 
+            'muzli_logo_render', 
+            'muzli_theme', 
+            'muzli_logo_section' 
+        );
+
+
+    }
+
+    function save_muzli_theme_settings( $data) {
+
+        $data = array_map('sanitize_text_field', $data);
+        $options = extend_array(get_option('muzli_settings'), $data);
+
+        if ( !empty( $_FILES['logo']['tmp_name'] ) && file_is_displayable_image( $_FILES['logo']['tmp_name'] ) ){
+            $upload = wp_handle_upload( $_FILES['logo'], array('test_form'=> false) );
+            $options['logo'] = $upload['url'];
+        }
+
+        return $options;
+    }
+
+
+    function copyright_by_render(  ) { 
+
+        $options = get_option( 'muzli_settings' );
+        $value = isset (options['copyright_by']) ? options['copyright_by'] : '' ; 
+        ?>
+        <input type="text" name="muzli_settings[copyright_by]" value="<?php echo $value ?>" class="regular-text">
+        <?php
+
+    }
+
+    
+    function copyright_text_render(  ) { 
+
+        $options = get_option( 'muzli_settings' );
+        $value = isset (options['copyright_text']) ? options['copyright_text'] : '' ; 
+        ?>
+        <textarea name="muzli_settings[copyright_text]" id="" cols="46" rows="3"><?php echo $value ?></textarea>
+        <?php
+
+    }
+
+    function muzli_logo_render(  ) { 
+
+        $options = get_option( 'muzli_settings' );
+        $logo = isset ($options['logo']) ? $options['logo'] : '' ; ?>
+
+            <p><input type="file" name="logo"></p>
+            
+        <?php if($logo): ?>
+            <p><img src="<?php esc_url( $logo ) ?>" alt="muzli-logo" class="muzli-logo"></p>
+        <?php endif;
+
+    }
+
+
+ 
+    function muzli_options_page(  ) { 
+
+            ?>
+            <div class="wrap">
+                
+                <h1>Theme Settings</h1>
+
+                <form action="options.php" method="post" enctype="multipart/form-data">
+                    <?php
+                        settings_fields( 'muzli_theme' );
+                        do_settings_sections( 'muzli_theme' );
+                        submit_button();
+                    ?>
+                </form>
+            </div>
+            <style>
+                .muzli-logo {
+                    border: 1px solid #ddd;
+                    border-radius: 6px;
+                }
+            </style>
+
+            <?php
+
+    }
+
+    //---------------------------------
+
+
+
+
+
+
+
     /**
      * Add scripts & styles
      */
@@ -263,4 +421,25 @@
 
 ?>
 
+<?php 
+/**
+ * jQuery style array extend
+ *
+ * @return array
+ */
+function extend_array()
+{
+    $args     = func_get_args();
+    $extended = array();
+    if ( is_array( $args ) && count( $args ) )
+    {
+        foreach ( $args as $array )
+        {
+            if ( ! is_array( $array ) ) continue;
+            $extended = array_merge( $extended, $array );
+        }
+    }
+    return $extended;
+}
+?>
 
